@@ -113,14 +113,14 @@ class DoubleLinkedList(Iterable):
                 if(node is None):
                     raise IndexError
                 node = node.next
-            return node
+            return node.data
         else:
             node = self._last
             for n in range(i, 0):
                 if(node is None):
                     raise IndexError
                 node = node.prev
-            return node
+            return node.data
 
 
     def append(self, x):
