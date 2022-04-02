@@ -69,6 +69,13 @@ class DoubleLinkedList(Iterable):
         >>> b.pop()
         >>> b
         [1]
+        >>> c = DoubleLinkedList()
+        >>> c.insert(0,1)
+        >>> c.insert(1,2)
+        >>> c.insert(100,3)
+        >>> c.insert(0,4)
+        >>> c
+        [4, 1, 2, 3]
     """
 
     def __init__(self) -> None:
@@ -214,7 +221,7 @@ class DoubleLinkedList(Iterable):
         # 一つ後のノードと新たなノードをつなぐ
         # ない場合はリストの末端ノードが新たなノードとなる
         if(node_new_next is None):
-            self._last = node_new_next
+            self._last = new_node
         else:
             new_node.next = node_new_next
             node_new_next.prev = new_node
