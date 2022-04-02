@@ -78,10 +78,14 @@ class DoubleLinkedList(Iterable):
         [4, 1, 2, 3]
     """
 
-    def __init__(self) -> None:
+    def __init__(self, iterable: Iterable = None) -> None:
         self._first: _DoubleLinkNode = None  # 開始ノード
         self._last: _DoubleLinkNode = None  # 末端ノード
         self._length = 0       # リストの要素数
+
+        if(iterable is not None):
+            for x in iterable:
+                self.append(x)
 
     def append(self, x):
         # 挿入する新たなノードを作成
