@@ -106,6 +106,23 @@ class DoubleLinkedList(Iterable):
             for x in iterable:
                 self.append(x)
 
+    def index(self, i:int):
+        if i >= 0:
+            node = self._first
+            for n in range(i):
+                if(node is None):
+                    raise IndexError
+                node = node.next
+            return node
+        else:
+            node = self._last
+            for n in range(i, 0):
+                if(node is None):
+                    raise IndexError
+                node = node.prev
+            return node
+
+
     def append(self, x):
         # 挿入する新たなノードを作成
         new_node = _DoubleLinkNode(x)
