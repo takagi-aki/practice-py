@@ -34,6 +34,25 @@ class DoubleLinkedListItarator:
     def node(self):
         return self.__node
 
+    @property
+    def value(self):
+        return self.__node.data
+
+    @value.setter
+    def value(self, x):
+        """
+        Example:
+            >>> x = DoubleLinkedList([1,2,3])
+            >>> it = iter(x)
+            >>> _ = next(it)
+            >>> it.value
+            2
+            >>> it.value = 4
+            >>> x
+            [1, 4, 3]
+        """
+        self.__node.data = x
+
     def __next__(self):
         if(self.__node is None):
             raise StopIteration
