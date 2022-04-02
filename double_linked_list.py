@@ -6,6 +6,10 @@
 __author__ = "Akinari Takagi"
 
 
+from typing import Iterable
+from attr import attr, attributes
+
+
 class _DoubleLinkNode:
 
     def __init__(self, data) -> None:
@@ -15,8 +19,20 @@ class _DoubleLinkNode:
 
 
 class DoubleLinkedListItarator:
-    def __init__(self, node: _DoubleLinkNode) -> None:
+    """双方向連結リストのイテレータ
+    """
+
+    def __init__(self, parent, node: _DoubleLinkNode) -> None:
+        self.__parent = parent
         self.__node = node
+
+    @property
+    def parent(self):
+        return self.__parent
+
+    @property
+    def node(self):
+        return self.__node
 
     def __next__(self):
         if(self.__node is None):
@@ -27,7 +43,7 @@ class DoubleLinkedListItarator:
             return node.data
 
 
-class DoubleLinkedList:
+class DoubleLinkedList(Iterable):
     """双方向連結リスト
 
     Examples:
@@ -162,9 +178,16 @@ class DoubleLinkedList:
         new_node = _DoubleLinkNode(x)
 
         # 挿入位置の一つ次のノードを特定
-        node = self._first
-        for n in range(min(i, len(self))):
-            node = node.next
+        if(isinstance(i, DoubleLinkedListItarator)):
+            if(i.parent is not self):
+                raise ValueError
+            node = i.node
+        elif(isinstance(i, int)):
+            node = self._first
+            for n in range(min(i, len(self))):
+                node = node.next
+        else:
+            raise ValueError
 
         # 挿入するノードの前後のノードを特定する
         node_new_prev: _DoubleLinkNode = None
@@ -215,7 +238,7 @@ class DoubleLinkedList:
         return self._length
 
     def __iter__(self):
-        return DoubleLinkedListItarator(self._first)
+        return DoubleLinkedListItarator(self, self._first)
 
     def __contains__(self, x) -> bool:
         """リスト内の要素にxと等価なものがあるか返す
