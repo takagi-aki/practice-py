@@ -24,6 +24,7 @@ def insertion_sort(values: Iterable):
         insertion sort
         1 2 3 4 5 6
         >>> insertion_sort([1, 2, 3])
+        insertion sort
         1 2 3
     """
 
