@@ -93,6 +93,56 @@ class DoubleLinkedListItarator:
             self.__node = self.__node.prev
             return node.data
 
+    def copy(self):
+        """イテレーターをコピーする
+
+        内部の値についてはコピーされない
+
+        Examples:
+            >>> a = DoubleLinkedList([1, 2, 3])
+            >>> it = iter(a)
+            >>> it.next()
+            1
+            >>> it2 = it.copy()
+            >>> it.next()
+            2
+            >>> it2.next()
+            2
+        """
+        return DoubleLinkedListItarator(self.__parent, self.__node)
+
+    def __eq__(self, other):
+        """イテレータがさすノードが等しいか返す
+
+        Examples:
+            >>> a = DoubleLinkedList([1, 2, 3])
+            >>> it = iter(a)
+            >>> _ = it.next()
+            >>> it2 = a.iterator(1)
+            >>> it == it2
+            True
+            >>> _ = it2.next()
+            >>> it == it2
+            False
+        """
+        return self.node == other.node
+
+    def __ne__(self, other):
+        """イテレータがさすノードが等しくないか返す
+
+        Examples:
+            >>> a = DoubleLinkedList([1, 2, 3])
+            >>> it = iter(a)
+            >>> _ = it.next()
+            >>> it2 = a.iterator(1)
+            >>> it != it2
+            False
+            >>> _ = it2.next()
+            >>> it != it2
+            True
+        """
+        return not (self == other)
+
 
 class DoubleLinkedList(Iterable):
     """双方向連結リスト
