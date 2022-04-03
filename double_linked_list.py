@@ -204,6 +204,71 @@ class DoubleLinkedList(Iterable):
                 node = node.prev
             return node
 
+    def __insert_node(self, node, x):
+        """ノードを挿入する
+
+        Args:
+            node : 新たなノードを追加する位置の次のノード。
+                   必ずリスト内に含まれることを確認すること。
+                   リスト内にない場合リストが壊れる。
+                   ただし、末尾に追加する場合はNone。
+            x    : 追加する値
+        """
+
+        # 挿入する新たなノードを作成
+        new_node = _DoubleLinkNode(x)
+
+        if(node is None):
+            if(self._last is None):
+                # リストが空のときの処理
+                self._first = new_node
+                self._last = new_node
+            else:
+                # 末尾に挿入するときの処理
+                new_node.prev = self._last
+                self._last.next = new_node
+                self._last = new_node
+        elif(node.prev is None):
+            # 先頭に挿入するときの処理
+            new_node.next = self._first
+            self._first.prev = new_node
+            self._first = new_node
+        else:
+            # 2個のノードの間に挿入するときの処理
+            new_node.next = node
+            new_node.prev = node.prev
+            node.prev.next = new_node
+            node.prev = new_node
+
+        # 要素のカウントをインクリメント
+        self._length += 1
+
+    def __erase_node(self, node):
+        """ノードを削除する
+
+        Args:
+            node : 削除するノード。必ずリスト内に含まれることを確認すること。リスト内にない場合リストが壊れる。
+        """
+
+        # 一つ前のノードの一つ先のノードを指定する
+        # 一つ前のノードがない場合は現在の次のノードがリストの開始ノードとなる
+        # 一つ前のノードがある場合は現在の次のノードとなる
+        if(node.prev is None):
+            self._first = node.next
+        else:
+            node.prev.next = node.next
+
+        # 一つ先のノードの一つ前のノードを指定する
+        # 一つ先のノードがない場合は現在の一つ前のノードがリストの終端ノードとなる
+        # 一つ先のノードがある場合は現在の一つ前のノードとなる
+        if(node.next is None):
+            self._last = node.prev
+        else:
+            node.next.prev = node.prev
+
+        # ノードの総数をデクリメント
+        self._length -= 1
+
     def index(self, i: int):
         """インデクスから要素の値を返す
 
@@ -257,22 +322,7 @@ class DoubleLinkedList(Iterable):
             [1, 2, 3]
         """
 
-        # 挿入する新たなノードを作成
-        new_node = _DoubleLinkNode(x)
-
-        # リストの開始ノードや末尾がないの時、あらたなノードをすれらにする
-        # そうでなければ末端に追加
-        if(self._first is None):
-            self._first = new_node
-        if(self._last is None):
-            self._last = new_node
-        else:
-            self._last.next = new_node
-            new_node.prev = self._last
-            self._last = new_node
-
-        # 要素のカウントをインクリメント
-        self._length += 1
+        self.__insert_node(None, x)
 
     def pop(self):
         """末尾の要素を削除
@@ -287,20 +337,7 @@ class DoubleLinkedList(Iterable):
             [1, 2]
         """
 
-        # リストの開始ノードや末尾がないの時、そのまま
-        # リストの末端=先端ならば末端と先端はNone
-        # そうでなければ末端の一つ前のノードを末端にする
-        if(self._last is None):
-            return
-        if(self._last.prev is None):
-            self._last = None
-            self._first = None
-        else:
-            self._last.prev.next = None
-            self._last = self._last.prev
-
-        # 要素のカウントをデクリメント
-        self._length -= 1
+        self.__erase_node(self._last)
 
     def appendleft(self, x):
         """先頭の要素を追加
@@ -314,22 +351,7 @@ class DoubleLinkedList(Iterable):
             [3, 2, 1]
         """
 
-        # 挿入する新たなノードを作成
-        new_node = _DoubleLinkNode(x)
-
-        # リストの開始ノードや末尾がないの時、あらたなノードをすれらにする
-        # そうでなければ開始に追加
-        if(self._first is None):
-            self._first = new_node
-        if(self._last is None):
-            self._last = new_node
-        else:
-            self._first.prev = new_node
-            new_node.next = self._first
-            self._first = new_node
-
-        # 要素のカウントをインクリメント
-        self._length += 1
+        self.__insert_node(self._first, x)
 
     def popleft(self):
         """先頭の要素を削除
@@ -344,20 +366,7 @@ class DoubleLinkedList(Iterable):
             [2, 1]
         """
 
-        # リストの開始ノードがないの時、そのまま
-        # リストの末端=先端ならば末端と先端はNone
-        # そうでなければ開始の一つ先のノードを開始ノードにする
-        if(self._first is None):
-            return
-        if(self._first.next is None):
-            self._last = None
-            self._first = None
-        else:
-            self._first.next.prev = None
-            self._first = self._first.next
-
-        # 要素のカウントをデクリメント
-        self._length -= 1
+        self.__erase_node(self._first)
 
     def delete(self, x):
         """指定した値と等価な要素をすべて削除
@@ -375,25 +384,7 @@ class DoubleLinkedList(Iterable):
 
             # ノードのデータと一致したらノードを削除する
             if node.data == x:
-
-                # 一つ前のノードの一つ先のノードを指定する
-                # 一つ前のノードがない場合は現在の次のノードがリストの開始ノードとなる
-                # 一つ前のノードがある場合は現在の次のノードとなる
-                if(node.prev is None):
-                    self._first = node.next
-                else:
-                    node.prev.next = node.next
-
-                # 一つ先のノードの一つ前のノードを指定する
-                # 一つ先のノードがない場合は現在の一つ前のノードがリストの終端ノードとなる
-                # 一つ先のノードがある場合は現在の一つ前のノードとなる
-                if(node.next is None):
-                    self._last = node.prev
-                else:
-                    node.next.prev = node.prev
-
-                # 要素のカウントをデクリメント
-                self._length -= 1
+                self.__erase_node(node)
 
             node = next_node
 
@@ -411,9 +402,6 @@ class DoubleLinkedList(Iterable):
             [1, 2, 6, 7, 3, 4, 5]
         """
 
-        # 挿入する新たなノードを作成
-        new_node = _DoubleLinkNode(x)
-
         # 挿入位置の一つ次のノードを特定
         if(isinstance(i, DoubleLinkedListItarator)):
             if(i.parent is not self):
@@ -424,38 +412,33 @@ class DoubleLinkedList(Iterable):
         else:
             raise ValueError
 
-        # 挿入するノードの前後のノードを特定する
-        node_new_prev: _DoubleLinkNode = None
-        node_new_next: _DoubleLinkNode = None
+        self.__insert_node(node, x)
 
-        if(node is None):
-            node_new_prev = self._last
-            node_new_next = None
-        elif(node.prev is None):
-            node_new_prev = None
-            node_new_next = node
+    def erase(self, i):
+        """指定した場所の要素を削除
+
+        Examples:
+            >>> a = DoubleLinkedList([1,2,3,4,5])
+            >>> a.erase(2)
+            >>> a
+            [1, 2, 4, 5]
+            >>> it = a.iterator(3)
+            >>> a.erase(it)
+            >>> a
+            [1, 2, 4]
+        """
+
+        # 挿入位置の一つ次のノードを特定
+        if(isinstance(i, DoubleLinkedListItarator)):
+            if(i.parent is not self):
+                raise ValueError
+            node = i.node
+        elif(isinstance(i, int)):
+            node = self.__find_node_from_index(i)
         else:
-            node_new_prev = node.prev
-            node_new_next = node
+            raise ValueError
 
-        # 一つ前のノードと新たなノードをつなぐ
-        # ない場合はリストの開始ノードが新たなノードとなる
-        if(node_new_prev is None):
-            self._first = new_node
-        else:
-            new_node.prev = node_new_prev
-            node_new_prev.next = new_node
-
-        # 一つ後のノードと新たなノードをつなぐ
-        # ない場合はリストの末端ノードが新たなノードとなる
-        if(node_new_next is None):
-            self._last = new_node
-        else:
-            new_node.next = node_new_next
-            node_new_next.prev = new_node
-
-        # 要素のカウントをインクリメント
-        self._length += 1
+        self.__erase_node(node)
 
     def __len__(self):
         """リスト内の要素数を返す
