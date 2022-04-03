@@ -7,7 +7,6 @@ __author__ = "Akinari Takagi"
 
 
 from typing import Iterable
-from attr import attr, attributes
 
 
 class _DoubleLinkNode:
@@ -61,6 +60,39 @@ class DoubleLinkedListItarator:
             self.__node = self.__node.next
             return node.data
 
+    def next(self):
+        """イテレーターを一つ先に進める
+
+        Examples:
+            >>> a = DoubleLinkedList([1, 2, 3])
+            >>> it = iter(a)
+            >>> it.next()
+            1
+            >>> it.next()
+            2
+        """
+        return next(self)
+
+    def prev(self):
+        """イテレーターを一つ前に戻す
+
+        Examples:
+            >>> a = DoubleLinkedList([1, 2, 3])
+            >>> it = iter(a)
+            >>> it.next()
+            1
+            >>> it.prev()
+            2
+            >>> it.prev()
+            1
+        """
+        if(self.__node is None):
+            raise StopIteration
+        else:
+            node = self.__node
+            self.__node = self.__node.prev
+            return node.data
+
 
 class DoubleLinkedList(Iterable):
     """双方向連結リスト
@@ -106,24 +138,75 @@ class DoubleLinkedList(Iterable):
             for x in iterable:
                 self.append(x)
 
-    def index(self, i:int):
+    def __find_node_from_index(self, i: int):
         if i >= 0:
             node = self._first
             for n in range(i):
                 if(node is None):
                     raise IndexError
                 node = node.next
-            return node.data
+            return node
         else:
             node = self._last
-            for n in range(i, 0):
+            for n in range(i, -1, 1):
                 if(node is None):
                     raise IndexError
                 node = node.prev
-            return node.data
+            return node
 
+    def index(self, i: int):
+        """インデクスから要素の値を返す
+
+        i >= 0 なら先頭からi番目
+        i < 0 なら末尾から-i番目の値を返す
+        リスト内の要素nに対して O(n)
+
+        Examples:
+            >>> a = DoubleLinkedList([1,2,3,4])
+            >>> a.index(0)
+            1
+            >>> a.index(2)
+            3
+            >>> a.index(-1)
+            4
+        """
+        node = self.__find_node_from_index(i)
+        return node.data
+
+    def iterator(self, i: int):
+        """インデクスからイテレータを返す
+
+        i >= 0 なら先頭からi番目
+        i < 0 なら末尾から-i番目のイテレータを返す
+        リスト内の要素nに対して O(n)
+
+        Examples:
+            >>> a = DoubleLinkedList([1,2,3,4])
+            >>> it = a.iterator(0)
+            >>> it.value
+            1
+            >>> it = a.iterator(2)
+            >>> it.value
+            3
+            >>> it = a.iterator(-1)
+            >>> it.value
+            4
+        """
+        node = self.__find_node_from_index(i)
+        return DoubleLinkedListItarator(self, node)
 
     def append(self, x):
+        """末尾に要素を追加
+
+        Examples:
+            >>> a = DoubleLinkedList()
+            >>> a.append(1)
+            >>> a.append(2)
+            >>> a.append(3)
+            >>> a
+            [1, 2, 3]
+        """
+
         # 挿入する新たなノードを作成
         new_node = _DoubleLinkNode(x)
 
@@ -142,6 +225,18 @@ class DoubleLinkedList(Iterable):
         self._length += 1
 
     def pop(self):
+        """末尾の要素を削除
+
+        Examples:
+            >>> a = DoubleLinkedList()
+            >>> a.append(1)
+            >>> a.append(2)
+            >>> a.append(3)
+            >>> a.pop()
+            >>> a
+            [1, 2]
+        """
+
         # リストの開始ノードや末尾がないの時、そのまま
         # リストの末端=先端ならば末端と先端はNone
         # そうでなければ末端の一つ前のノードを末端にする
@@ -158,6 +253,17 @@ class DoubleLinkedList(Iterable):
         self._length -= 1
 
     def appendleft(self, x):
+        """先頭の要素を追加
+
+        Examples:
+            >>> a = DoubleLinkedList()
+            >>> a.appendleft(1)
+            >>> a.appendleft(2)
+            >>> a.appendleft(3)
+            >>> a
+            [3, 2, 1]
+        """
+
         # 挿入する新たなノードを作成
         new_node = _DoubleLinkNode(x)
 
@@ -176,6 +282,18 @@ class DoubleLinkedList(Iterable):
         self._length += 1
 
     def popleft(self):
+        """先頭の要素を削除
+
+        Examples:
+            >>> a = DoubleLinkedList()
+            >>> a.appendleft(1)
+            >>> a.appendleft(2)
+            >>> a.appendleft(3)
+            >>> a.popleft()
+            >>> a
+            [2, 1]
+        """
+
         # リストの開始ノードがないの時、そのまま
         # リストの末端=先端ならば末端と先端はNone
         # そうでなければ開始の一つ先のノードを開始ノードにする
@@ -192,6 +310,15 @@ class DoubleLinkedList(Iterable):
         self._length -= 1
 
     def delete(self, x):
+        """指定した値と等価な要素をすべて削除
+
+        Examples:
+            >>> a = DoubleLinkedList([1,2,3,2,1])
+            >>> a.delete(1)
+            >>> a
+            [2, 3, 2]
+        """
+
         node = self._first
         while(node is not None):
             next_node = node.next
@@ -221,6 +348,19 @@ class DoubleLinkedList(Iterable):
             node = next_node
 
     def insert(self, i, x):
+        """指定した場所に要素を追加
+
+        Examples:
+            >>> a = DoubleLinkedList([1,2,3,4,5])
+            >>> a.insert(2, 6)
+            >>> a
+            [1, 2, 6, 3, 4, 5]
+            >>> it = a.iterator(3)
+            >>> a.insert(it, 7)
+            >>> a
+            [1, 2, 6, 7, 3, 4, 5]
+        """
+
         # 挿入する新たなノードを作成
         new_node = _DoubleLinkNode(x)
 
@@ -230,9 +370,7 @@ class DoubleLinkedList(Iterable):
                 raise ValueError
             node = i.node
         elif(isinstance(i, int)):
-            node = self._first
-            for n in range(min(i, len(self))):
-                node = node.next
+            node = self.__find_node_from_index(min(i, len(self)))
         else:
             raise ValueError
 
