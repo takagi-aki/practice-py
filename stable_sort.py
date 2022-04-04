@@ -19,6 +19,9 @@ class Card:
     def __repr__(self) -> str:
         return self.str
 
+    def __lt__(self, other):
+        return self.value < other.value
+
 
 def is_stable(d1: Iterable[Card], d2: Iterable[Card]):
 
@@ -105,14 +108,14 @@ def doublelinkedlist_stable_sort(values: Iterable[Card]):
 
     Example:
         >>> test1 = list(map(Card,['H4', 'C9', 'S4', 'D2', 'C3']))
-        >>> stable_sort(test1)
+        >>> doublelinkedlist_stable_sort(test1)
         doublelinkedlist stable sort
         D2 C3 H4 S4 C9
         Stable
-        D2 C3 S4 H4 C9
-        Not stable
+        D2 C3 H4 S4 C9
+        Stable
         >>> test2 = list(map(Card, ['S1', 'H1']))
-        >>> stable_sort(test2)
+        >>> doublelinkedlist_stable_sort(test2)
         doublelinkedlist stable sort
         S1 H1
         Stable
