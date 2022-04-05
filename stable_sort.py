@@ -141,7 +141,7 @@ def doublelinkedlist_stable_sort(values: Iterable[Card], comp_func=lambda a, b: 
             it_left.prev()
             while True:
                 it_check.prev()
-                if comp_func(it_right.value, it_left.value):
+                if comp_func(it_right.value.value, it_left.value.value):
                     is_not_sorted = True
                     it_right.value, it_left.value = it_left.value, it_right.value
                 it_left.prev()
@@ -166,7 +166,7 @@ def doublelinkedlist_stable_sort(values: Iterable[Card], comp_func=lambda a, b: 
             while True:
                 tmp_it = it.copy()
                 it.next()
-                if comp_func(tmp_it.value, min_it.value):
+                if comp_func(tmp_it.value.value, min_it.value.value):
                     min_it = tmp_it
         except StopIteration:
             buffer.append(min_it.value)
