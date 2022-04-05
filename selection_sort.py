@@ -11,7 +11,7 @@ from typing import Iterable
 from double_linked_list import DoubleLinkedList
 
 
-def selection_sort(values: Iterable):
+def selection_sort(values: Iterable, comp_func=lambda a, b: a < b):
     """選択ソート
 
     Iterableなオブジェクト内の要素をソートし
@@ -38,7 +38,7 @@ def selection_sort(values: Iterable):
     for i in range(len(buffer)):
         min_index = i
         for j in range(i + 1, len(buffer)):
-            if(buffer[j] < buffer[min_index]):
+            if comp_func(buffer[j], buffer[min_index]):
                 min_index = j
         if(min_index != i):
             swapcnt += 1
@@ -48,7 +48,7 @@ def selection_sort(values: Iterable):
     print(str(swapcnt))
 
 
-def doublelinkedlist_selection_sort(values: Iterable):
+def doublelinkedlist_selection_sort(values: Iterable, comp_func=lambda a, b: a < b):
     """DoubleLinkedListを使った選択ソート
 
     Iterableなオブジェクト内の要素をソートし
@@ -84,7 +84,7 @@ def doublelinkedlist_selection_sort(values: Iterable):
             while True:
                 tmp_it = it.copy()
                 it.next()
-                if(tmp_it.value < min_it.value):
+                if comp_func(tmp_it.value, min_it.value):
                     min_it = tmp_it
         except StopIteration:
             buffer.append(min_it.value)

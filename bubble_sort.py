@@ -11,7 +11,7 @@ from typing import Iterable
 from double_linked_list import DoubleLinkedList
 
 
-def bubble_sort(values: Iterable):
+def bubble_sort(values: Iterable, comp_func=lambda a, b: a < b):
     """Listを利用したバブルソート
 
     Iterableなオブジェクト内の要素をソートし
@@ -37,7 +37,7 @@ def bubble_sort(values: Iterable):
     while(is_not_sorted):
         is_not_sorted = False
         for j in range(len(buffer)-1, 0, -1):
-            if(buffer[j] < buffer[j - 1]):
+            if(comp_func(buffer[j], buffer[j - 1])):
                 swapcnt += 1
                 is_not_sorted = True
                 buffer[j - 1], buffer[j] = buffer[j], buffer[j - 1]
@@ -46,7 +46,7 @@ def bubble_sort(values: Iterable):
     print(str(swapcnt))
 
 
-def doublelinkedlist_bubble_sort(values: Iterable):
+def doublelinkedlist_bubble_sort(values: Iterable, comp_func=lambda a, b: a < b):
     """DoubleLinkedListを利用したバブルソート
 
     Iterableなオブジェクト内の要素をソートし
@@ -80,7 +80,7 @@ def doublelinkedlist_bubble_sort(values: Iterable):
             it_left.prev()
             while True:
                 it_check.prev()
-                if(it_right.value < it_left.value):
+                if(comp_func(it_right.value, it_left.value)):
                     swapcnt += 1
                     is_not_sorted = True
                     it_right.value, it_left.value = it_left.value, it_right.value

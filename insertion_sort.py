@@ -11,7 +11,7 @@ from typing import Iterable
 from double_linked_list import DoubleLinkedList
 
 
-def insertion_sort(values: Iterable):
+def insertion_sort(values: Iterable, comp_func=lambda a, b: a < b):
     """標準listを使用した挿入ソート
 
     Iterableなオブジェクト内の要素をソートし
@@ -43,7 +43,7 @@ def insertion_sort(values: Iterable):
     for i in range(len(buffer)):
         v = buffer[i]
         j = i - 1
-        while j >= 0 and buffer[j] > v:
+        while j >= 0 and comp_func(v, buffer[j]):
             buffer[j+1] = buffer[j]
             j -= 1
         buffer[j+1] = v
@@ -51,7 +51,7 @@ def insertion_sort(values: Iterable):
         print(' '.join(map(str, buffer)))
 
 
-def doublelinkedlist_insertion_sort(values: Iterable):
+def doublelinkedlist_insertion_sort(values: Iterable, comp_func=lambda a, b: a < b):
     """DoubleLinkedListを使用した挿入ソート
 
     Iterableなオブジェクト内の要素をソートし
@@ -87,7 +87,7 @@ def doublelinkedlist_insertion_sort(values: Iterable):
         while(True):
             try:
                 val = next(it)
-                if(not (val < x)):
+                if(not comp_func(val, x)):
                     buffer.insert(it2, x)
                     break
                 _ = next(it2)

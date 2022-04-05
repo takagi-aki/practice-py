@@ -6,6 +6,8 @@
 __author__ = "Akinari Takagi"
 
 from typing import Iterable
+
+
 from double_linked_list import DoubleLinkedList
 
 
@@ -45,7 +47,7 @@ def is_stable(d1: Iterable[Card], d2: Iterable[Card]):
     return True
 
 
-def stable_sort(values: Iterable[Card]):
+def stable_sort(values: Iterable[Card], comp_func=lambda a, b: a < b):
     """標準listを利用した安定ソート
 
     Iterableなオブジェクト内の要素をソートし
@@ -73,7 +75,7 @@ def stable_sort(values: Iterable[Card]):
     buffer = list(values)
     for i in range(len(buffer)):
         for j in range(len(buffer)-1, i, -1):
-            if(buffer[j].value < buffer[j - 1].value):
+            if comp_func(buffer[j].value, buffer[j - 1].value):
                 buffer[j - 1], buffer[j] = buffer[j], buffer[j - 1]
 
     print(' '.join(map(str, buffer)))
@@ -87,7 +89,7 @@ def stable_sort(values: Iterable[Card]):
         min_val = buffer[i]
         min_index = i
         for j in range(i, len(buffer)):
-            if(buffer[j].value < min_val.value):
+            if comp_func(buffer[j].value, min_val.value):
                 min_val = buffer[j]
                 min_index = j
         buffer[min_index], buffer[i] = buffer[i], buffer[min_index]
@@ -99,7 +101,7 @@ def stable_sort(values: Iterable[Card]):
         print('Not stable')
 
 
-def doublelinkedlist_stable_sort(values: Iterable[Card]):
+def doublelinkedlist_stable_sort(values: Iterable[Card], comp_func=lambda a, b: a < b):
     """DoubleLinkedListを利用した安定ソート
 
     Iterableなオブジェクト内の要素をソートし
@@ -139,7 +141,7 @@ def doublelinkedlist_stable_sort(values: Iterable[Card]):
             it_left.prev()
             while True:
                 it_check.prev()
-                if(it_right.value < it_left.value):
+                if comp_func(it_right.value, it_left.value):
                     is_not_sorted = True
                     it_right.value, it_left.value = it_left.value, it_right.value
                 it_left.prev()
@@ -164,7 +166,7 @@ def doublelinkedlist_stable_sort(values: Iterable[Card]):
             while True:
                 tmp_it = it.copy()
                 it.next()
-                if(tmp_it.value < min_it.value):
+                if comp_func(tmp_it.value, min_it.value):
                     min_it = tmp_it
         except StopIteration:
             buffer.append(min_it.value)
