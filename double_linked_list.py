@@ -18,7 +18,11 @@ class _DoubleLinkNode:
 
 
 class DoubleLinkedListItarator:
-    """双方向連結リストのイテレータ
+    """双方向連結リストのイテレータ.
+
+    双方向連結リストDoubleLinkedListのイテレータ.
+    元のリストでイテレータが指定するデータをeraseやpopしたあとのイテレータの動作は未定なので、利用しないでください.
+    insertやappendするときは問題ありません.
     """
 
     def __init__(self, parent, node: _DoubleLinkNode) -> None:
@@ -112,7 +116,7 @@ class DoubleLinkedListItarator:
         return DoubleLinkedListItarator(self.__parent, self.__node)
 
     def __eq__(self, other):
-        """イテレータがさすノードが等しいか返す
+        """イテレータがさすノードが等しいか返す.
 
         Examples:
             >>> a = DoubleLinkedList([1, 2, 3])
@@ -128,7 +132,7 @@ class DoubleLinkedListItarator:
         return self.node == other.node
 
     def __ne__(self, other):
-        """イテレータがさすノードが等しくないか返す
+        """イテレータがさすノードが等しくないか返す.
 
         Examples:
             >>> a = DoubleLinkedList([1, 2, 3])
@@ -145,7 +149,7 @@ class DoubleLinkedListItarator:
 
 
 class DoubleLinkedList(Iterable):
-    """双方向連結リスト
+    """双方向連結リスト.
 
     Examples:
         >>> a = DoubleLinkedList()
@@ -188,7 +192,20 @@ class DoubleLinkedList(Iterable):
             for x in iterable:
                 self.append(x)
 
-    def __find_node_from_index(self, i: int):
+    def __find_node_from_index(self, i: int) -> _DoubleLinkNode:
+        """先頭(末尾)からi番目のノードを取得する.
+
+        Args:
+            i: 取得するノードのインデックス.
+
+        Returns:
+            i >= 0 先頭からi番目のノード.
+            i < 0 末尾から1-i番目のノード.
+
+        Raises:
+            IndexError: 指定するノードがデータ列の範囲外の時.
+        """
+
         if i >= 0:
             node = self._first
             for n in range(i):
@@ -205,14 +222,14 @@ class DoubleLinkedList(Iterable):
             return node
 
     def __insert_node(self, node, x):
-        """ノードを挿入する
+        """ノードを挿入する.
 
         Args:
-            node : 新たなノードを追加する位置の次のノード。
-                   必ずリスト内に含まれることを確認すること。
-                   リスト内にない場合リストが壊れる。
-                   ただし、末尾に追加する場合はNone。
-            x    : 追加する値
+            node : 新たなノードを追加する位置の次のノード.
+                   必ずリスト内に含まれることを確認すること.
+                   リスト内にない場合リストが壊れる.
+                   ただし、末尾に追加する場合はNone.
+            x    : 追加する値.
         """
 
         # 挿入する新たなノードを作成
@@ -244,10 +261,10 @@ class DoubleLinkedList(Iterable):
         self._length += 1
 
     def __erase_node(self, node):
-        """ノードを削除する
+        """ノードを削除する.
 
         Args:
-            node : 削除するノード。必ずリスト内に含まれることを確認すること。リスト内にない場合リストが壊れる。
+            node : 削除するノード。必ずリスト内に含まれることを確認すること。リスト内にない場合リストが壊れる.
         """
 
         # 一つ前のノードの一つ先のノードを指定する
@@ -270,11 +287,17 @@ class DoubleLinkedList(Iterable):
         self._length -= 1
 
     def index(self, i: int):
-        """インデクスから要素の値を返す
+        """インデクスから要素の値を返す.
 
-        i >= 0 なら先頭からi番目
-        i < 0 なら末尾から-i番目の値を返す
-        リスト内の要素nに対して O(n)
+        Args:
+            i: 取得したい値のインデックス.
+
+        Returns:
+            i >= 0 先頭からi番目のノードの値.
+            i < 0 末尾から1-i番目のノードの値.
+
+        Raises:
+            IndexError: 指定するノードがデータ列の範囲外の時.
 
         Examples:
             >>> a = DoubleLinkedList([1,2,3,4])
@@ -289,11 +312,15 @@ class DoubleLinkedList(Iterable):
         return node.data
 
     def iterator(self, i: int):
-        """インデクスからイテレータを返す
+        """インデクスからイテレータを返す.
 
-        i >= 0 なら先頭からi番目
-        i < 0 なら末尾から-i番目のイテレータを返す
-        リスト内の要素nに対して O(n)
+        Args:
+            i: 取得したいイテレータの示す値のインデックス.
+
+        Returns:
+            i >= 0 先頭からi番目のイテレータ.
+            i < 0 末尾から1-i番目のイテレータ.
+            iが範囲のとき、ノードのデータを持たないイテレータ.
 
         Examples:
             >>> a = DoubleLinkedList([1,2,3,4])
@@ -307,11 +334,14 @@ class DoubleLinkedList(Iterable):
             >>> it.value
             4
         """
-        node = self.__find_node_from_index(i)
+            node = self.__find_node_from_index(i)
         return DoubleLinkedListItarator(self, node)
 
     def append(self, x):
-        """末尾に要素を追加
+        """末尾に要素を追加.
+
+        Args:
+            x: 追加したい値.
 
         Examples:
             >>> a = DoubleLinkedList()
@@ -325,7 +355,7 @@ class DoubleLinkedList(Iterable):
         self.__insert_node(None, x)
 
     def pop(self):
-        """末尾の要素を削除
+        """末尾の要素を削除.
 
         Examples:
             >>> a = DoubleLinkedList()
@@ -340,7 +370,10 @@ class DoubleLinkedList(Iterable):
         self.__erase_node(self._last)
 
     def appendleft(self, x):
-        """先頭の要素を追加
+        """先頭の要素を追加.
+
+        Args:
+            x: 追加したい値.
 
         Examples:
             >>> a = DoubleLinkedList()
@@ -354,7 +387,7 @@ class DoubleLinkedList(Iterable):
         self.__insert_node(self._first, x)
 
     def popleft(self):
-        """先頭の要素を削除
+        """先頭の要素を削除.
 
         Examples:
             >>> a = DoubleLinkedList()
@@ -369,7 +402,10 @@ class DoubleLinkedList(Iterable):
         self.__erase_node(self._first)
 
     def delete(self, x):
-        """指定した値と等価な要素をすべて削除
+        """指定した値と等価な要素をすべて削除.
+
+        Args:
+            x: 削除したい値.
 
         Examples:
             >>> a = DoubleLinkedList([1,2,3,2,1])
@@ -389,7 +425,14 @@ class DoubleLinkedList(Iterable):
             node = next_node
 
     def insert(self, i, x):
-        """指定した場所に要素を追加
+        """指定した場所に要素を追加.
+
+        Args:
+            i: 削除したい場所のインデックスまたはイテレータ.
+            x: 追加したい値.
+
+        Raises:
+            ValueError: iの型が無効であるか、イテレータが無効である.
 
         Examples:
             >>> a = DoubleLinkedList([1,2,3,4,5])
@@ -415,7 +458,13 @@ class DoubleLinkedList(Iterable):
         self.__insert_node(node, x)
 
     def erase(self, i):
-        """指定した場所の要素を削除
+        """指定した場所の要素を削除.
+
+        Args:
+            i: 削除したい場所のインデックスまたはイテレータ.
+
+        Raises:
+            ValueError: iの型が無効であるか、イテレータが無効である.
 
         Examples:
             >>> a = DoubleLinkedList([1,2,3,4,5])
@@ -440,7 +489,7 @@ class DoubleLinkedList(Iterable):
 
         self.__erase_node(node)
 
-    def __len__(self):
+    def __len__(self) -> int:
         """リスト内の要素数を返す
 
         Examples:
@@ -455,7 +504,7 @@ class DoubleLinkedList(Iterable):
         """
         return self._length
 
-    def __iter__(self):
+    def __iter__(self) -> DoubleLinkedListItarator:
         return DoubleLinkedListItarator(self, self._first)
 
     def __contains__(self, x) -> bool:

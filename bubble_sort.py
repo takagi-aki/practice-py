@@ -5,6 +5,7 @@
 
 __author__ = "Akinari Takagi"
 
+
 from typing import Iterable
 
 
@@ -12,10 +13,13 @@ from double_linked_list import DoubleLinkedList
 
 
 def bubble_sort(values: Iterable):
-    """Listを利用したバブルソート
+    """Listを利用したバブルソート.
 
-    Iterableなオブジェクト内の要素をソートし
-    結果を標準出力に表示する
+    Iterableなオブジェクト内の要素をソートし結果を標準出力に表示する.
+    valuesはlistやsetなどは非破壊.ただし、mapやイテレータの場合は末尾まで移動する.
+
+    Args:
+        values: ソートしたいデータの列を返すIterableオブジェクト.
 
     Example:
         >>> bubble_sort([5,3,2,4,1])
@@ -49,8 +53,11 @@ def bubble_sort(values: Iterable):
 def doublelinkedlist_bubble_sort(values: Iterable):
     """DoubleLinkedListを利用したバブルソート
 
-    Iterableなオブジェクト内の要素をソートし
-    結果を標準出力に表示する
+    Iterableなオブジェクト内の要素をソートし結果を標準出力に表示する.
+    valuesはlistやsetなどは非破壊.ただし、mapやイテレータの場合は末尾まで移動する.
+
+    Args:
+        values: ソートしたいデータの列を返すIterableオブジェクト.
 
     Example:
         >>> doublelinkedlist_bubble_sort([5,3,2,4,1])

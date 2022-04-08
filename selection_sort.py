@@ -14,10 +14,11 @@ from double_linked_list import DoubleLinkedList
 def selection_sort(values: Iterable):
     """選択ソート
 
-    Iterableなオブジェクト内の要素をソートし
-    結果を標準出力に表示する
-    非破壊
-    O(n^2)
+    Iterableなオブジェクト内の要素をソートし結果を標準出力に表示する.
+    valuesはlistやsetなどは非破壊.ただし、mapやイテレータの場合は末尾まで移動する.
+
+    Args:
+        values: ソートしたいデータの列を返すIterableオブジェクト.
 
     Example:
         >>> selection_sort([5, 6, 4, 2, 1, 3])
@@ -51,10 +52,11 @@ def selection_sort(values: Iterable):
 def doublelinkedlist_selection_sort(values: Iterable):
     """DoubleLinkedListを使った選択ソート
 
-    Iterableなオブジェクト内の要素をソートし
-    結果を標準出力に表示する
-    非破壊
-    O(n^2)
+    Iterableなオブジェクト内の要素をソートし結果を標準出力に表示する.
+    valuesはlistやsetなどは非破壊.ただし、mapやイテレータの場合は末尾まで移動する.
+
+    Args:
+        values: ソートしたいデータの列を返すIterableオブジェクト.
 
     Example:
         >>> doublelinkedlist_selection_sort([5, 6, 4, 2, 1, 3])

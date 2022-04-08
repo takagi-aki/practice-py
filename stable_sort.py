@@ -1,17 +1,44 @@
 #!/user/bin/env python3
 # -*- coding: utf-8 -*-
 
-"""stable_sort.py: 安定ソート確認"""
+"""stable_sort.py: 安定ソート"""
 
 __author__ = "Akinari Takagi"
 
+
 from typing import Iterable
+
+
 from double_linked_list import DoubleLinkedList
 
 
 class Card:
+    """カードクラス.
+
+    トランプのカードの記号文字列と数値を分けて保存し利用しやすくするクラス.
+
+    Attributes:
+        str (str): 数値と記号を含めたカード名文字列.
+        value (int): カードの数値.
+        suit (str): カードの記号文字列.
+    """
+
 
     def __init__(self, card_str) -> None:
+        """
+        Args:
+            card_str (str): カードの記号と数値を表す文字列(例'H1').
+
+        Examples:    
+            >>> a = Card('S4')
+            >>> a.str
+            'S4'
+            >>> a.value
+            4
+            >>> a.suit
+            'S'
+        """
+
         self.str = card_str
         self.value = int(card_str[1:])
         self.suit = card_str[0]
@@ -19,11 +46,28 @@ class Card:
     def __repr__(self) -> str:
         return self.str
 
-    def __lt__(self, other):
-        return self.value < other.value
 
+def is_stable(d1: Iterable[Card], d2: Iterable[Card]) -> bool:
+    """トランプのソート結果が安定ソートであるか判別する.
 
-def is_stable(d1: Iterable[Card], d2: Iterable[Card]):
+    d1とd2の間で、同じ数値のカードの並びのうちで、記号の並びが等しいかどうか判別する.
+
+    Args:
+        d1: ソート前のカードの配列.
+        d2: ソート後のカードの配列.
+
+    Returns:
+        bool: 安定ソートであればTrueそうでなければFalse.
+
+    Examples:
+        >>> d1 = list(map(Card,['H4', 'S4', 'C3']))
+        >>> d2 = list(map(Card,['C3', 'H4', 'S4']))
+        >>> is_stable(d1, d2)
+        True
+        >>> d3 = list(map(Card,['S4', 'H4', 'C3']))
+        >>> is_stable(d1, d3)
+        False
+    """
 
     # 数字ごとの記号の並びを保存する領域確保
     suit_order = [DoubleLinkedList() for i in range(10)]
@@ -46,11 +90,14 @@ def is_stable(d1: Iterable[Card], d2: Iterable[Card]):
 
 
 def stable_sort(values: Iterable[Card]):
-    """標準listを利用した安定ソート
+    """標準listを利用した安定ソート.
 
-    Iterableなオブジェクト内の要素をソートし
-    結果を標準出力に表示する
-    安定ソートであるかどうかも出力する
+    Iterableなオブジェクト内の要素をソートし結果を標準出力に表示する.
+    安定ソートであるかどうかも出力する.
+    valuesはlistやsetなどは非破壊.ただし、mapやイテレータの場合は末尾まで移動する.
+
+    Args:
+        values: ソートしたいCardの列を返すIterableオブジェクト.
 
     Example:
         >>> test1 = list(map(Card,['H4', 'C9', 'S4', 'D2', 'C3']))
@@ -100,11 +147,15 @@ def stable_sort(values: Iterable[Card]):
 
 
 def doublelinkedlist_stable_sort(values: Iterable[Card]):
-    """DoubleLinkedListを利用した安定ソート
+    """DoubleLinkedListを利用した安定ソート.
 
-    Iterableなオブジェクト内の要素をソートし
-    結果を標準出力に表示する
-    安定ソートであるかどうかも出力する
+    Iterableなオブジェクト内の要素をソートし.
+    結果を標準出力に表示する.
+    安定ソートであるかどうかも出力する.
+    valuesはlistやsetなどは非破壊.ただし、mapやイテレータの場合は末尾まで移動する.
+
+    Args:
+        values: ソートしたいCardの列を返すIterableオブジェクト.
 
     Example:
         >>> test1 = list(map(Card,['H4', 'C9', 'S4', 'D2', 'C3']))
