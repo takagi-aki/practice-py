@@ -5,6 +5,7 @@
 
 __author__ = "Akinari Takagi"
 
+
 from typing import Iterable
 
 
@@ -12,13 +13,13 @@ from double_linked_list import DoubleLinkedList
 
 
 def insertion_sort(values: Iterable, comp_func=lambda a, b: a < b):
-    """標準listを使用した挿入ソート
+    """標準listを使用した挿入ソート.
 
-    Iterableなオブジェクト内の要素をソートし
-    結果を標準出力に表示する
+    Iterableなオブジェクト内の要素をソートし結果を標準出力に表示する.
+    valuesはlistやsetなどは非破壊.ただし、mapやイテレータの場合は末尾まで移動する.
 
-    n個の入力に対してO(n^2)
-    非破壊
+    Args:
+        values: ソートしたいデータの列を返すIterableオブジェクト.
 
     Example:
         >>> insertion_sort([5, 2, 4, 6, 1, 3])
@@ -54,11 +55,11 @@ def insertion_sort(values: Iterable, comp_func=lambda a, b: a < b):
 def doublelinkedlist_insertion_sort(values: Iterable, comp_func=lambda a, b: a < b):
     """DoubleLinkedListを使用した挿入ソート
 
-    Iterableなオブジェクト内の要素をソートし
-    結果を標準出力に表示する
+    Iterableなオブジェクト内の要素をソートし結果を標準出力に表示する.
+    valuesはlistやsetなどは非破壊.ただし、mapやイテレータの場合は末尾まで移動する.
 
-    n個の入力に対してO(n^2)
-    非破壊
+    Args:
+        values: ソートしたいデータの列を返すIterableオブジェクト.
 
     Example:
         >>> doublelinkedlist_insertion_sort([5, 2, 4, 6, 1, 3])
