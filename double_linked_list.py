@@ -334,7 +334,10 @@ class DoubleLinkedList(Iterable):
             >>> it.value
             4
         """
+        try:
             node = self.__find_node_from_index(i)
+        except IndexError:
+            node = None
         return DoubleLinkedListItarator(self, node)
 
     def append(self, x):
